@@ -13,6 +13,11 @@ funcs = SpecialFuntions()
 nasa = NasaSpaceFlight()
 
 
+if not os.path.exists('src'):
+    os.mkdir('src')
+if not os.path.exists('downloads'):
+    os.mkdir('downloads')
+
 print('Scraping data...')
 header = nasa.get_headline()
 paragrph = nasa.get_paragraph()
