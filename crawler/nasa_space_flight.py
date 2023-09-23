@@ -10,7 +10,7 @@ class NasaSpaceFlight(WebCrawler):
     def __init__(self) -> None:
         super().__init__()                                         
         self.__url = 'https://www.nasaspaceflight.com/news/spacex' 
-        self.__get_full_content()                                  
+        self.__get_full_content()    # This makes slow the init... :(                              
 
     # Returns published date of a given article
     # For future implementations
@@ -60,5 +60,3 @@ class NasaSpaceFlight(WebCrawler):
 
     # Print all the infomation to the Document
     def write_doc(self):...
-
-    

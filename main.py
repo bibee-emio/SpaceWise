@@ -8,7 +8,6 @@ from crawler import NasaSpaceFlight
 
 
 
-
 funcs = SpecialFuntions()
 nasa = NasaSpaceFlight()
 
