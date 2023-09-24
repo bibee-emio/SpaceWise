@@ -4,13 +4,16 @@ from PIL import Image
 from docx.image.exceptions import UnrecognizedImageError
 
 from helper import SpecialFuntions, DocumentWriter
-from crawler import NasaSpaceFlight
+from crawler import NasaSpaceFlight, SpaceX
 
 
 
 funcs = SpecialFuntions()
-nasa = NasaSpaceFlight()
+#nasa = NasaSpaceFlight()
+nasa = SpaceX()
 
+print(nasa.url)
+exit()
 
 
 print('Scraping data...')
