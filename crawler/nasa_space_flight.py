@@ -7,9 +7,9 @@ from . import WebCrawler
 
 class NasaSpaceFlight(WebCrawler):
 
-    def __init__(self) -> None:
+    def __init__(self,category: str) -> None:
         super().__init__()                                         
-        #self.__url = 'https://www.nasaspaceflight.com/news/spacex' 
+        self.__url = 'https://www.nasaspaceflight.com/news/' + category
         self.get_full_content()    # This makes slow the init... :(                              
 
     # Returns published date of a given article
@@ -20,10 +20,10 @@ class NasaSpaceFlight(WebCrawler):
         tim_e = [int(r) for r in published_date[1].split('-')[0].split(':')]
         return datetime(*dat_e,*tim_e)
     
-    # self.url will only show a preview
+    # self.__url will only show a preview of  the post
     # Getting the full article
     def get_full_content(self) -> BeautifulSoup:
-        preview = self.get_soup(self.url)
+        preview = self.get_soup(self.__url)
         # The URL for full content 
         url = preview.h2.a['href']
         self.__soup_obj = self.get_soup(url)
@@ -60,13 +60,3 @@ class NasaSpaceFlight(WebCrawler):
 
     # Print all the infomation to the Document
     def write_doc(self):...
-
-
-
-
-class SpaceX(NasaSpaceFlight):
-    
-    def __init__(self) -> None:
-        super().__init__()
-        self.url = 'https://www.nasaspaceflight.com/news/spacex'
-        #self.get_full_content()
