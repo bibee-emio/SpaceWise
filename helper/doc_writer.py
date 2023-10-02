@@ -1,8 +1,10 @@
+import os
+from PIL import Image
 from typing import Union, BinaryIO, List
 
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
-from docx.section import _BaseHeaderFooter
+from docx.image.exceptions import UnrecognizedImageError
 
 
 
@@ -43,4 +45,38 @@ class DocumentWriter:
         self.__doc.save(self.document_name)
 
     
+
+# For Write Documents that are realted to nasaspaceflight.com
+class NasaSpaceFlightDocumentWriter(DocumentWriter):
     
+    def __init__(self, document_name):
+        super().__init__(document_name)
+
+    def write_document(
+            self,
+            header: str,
+            lead_image: Union[str, os.PathLike],
+            paragraph: str,
+            image_count: int,
+            image_prefix: str
+        ):
+        # Writing the heading of the Article
+        self.write_header(header)
+        # Adding the lead image 
+        self.add_image(lead_image)
+        # Writing the paragraph
+        self.write_paragraph(paragraph)
+
+        # Adding remaining images at the end of the document
+
+        for pic_num in range(2,image_count):
+            img = f'src/{image_prefix}-pic-{pic_num}.jpg'
+            try:
+                self.add_image(img)
+            except UnrecognizedImageError:
+                Image.open(img).save(img)
+                self.add_image(img)
+        
+        # Finally saving the document(.docx) at the given path
+        self.save_document()
+        
