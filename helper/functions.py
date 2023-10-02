@@ -14,14 +14,16 @@ class SpecialFuntions:
     def split_paragraph(self,full_paragraph: str) -> List[str]:
         ...
 
-    def download_images(self,url_list: List[str]):
+    def download_images(self,url_list: List[str],image_prefix):
         c = 1
         for link in url_list:
             data = requests.get(link)
-            with open(f'{self.path}pic-{c}.jpg','wb') as imagefile:
+            with open(f'{self.path}{image_prefix}-pic-{c}.jpg','wb') as imagefile:
                 for chunk in data.iter_content(512):
                     imagefile.write(chunk)
                 #imagefile.write(data.content)
             #print(f'Image {c} downloaded successfully')
             c += 1
         return c
+    
+
