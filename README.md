@@ -21,7 +21,7 @@ cd SpaceWise
 ```
 - Install  dependencies
 ```
-pip -r install requirements.txt
+pip install -r requirements.txt
 ```
 
 ### Basic Usage
@@ -31,4 +31,6 @@ As a cli application, SpaceWise usage really simple. Get fun with it's iteractiv
 ```
 python main.py
 ```
-
+<!--
+<a href="https://www.freepik.com/free-ai-image/top-mountain-view_47991643.htm#fromView=search&term=star&page=1&position=33&track=ais_ai_generated">Image By freepik</a>
+!-->
