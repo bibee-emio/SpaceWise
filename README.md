@@ -1,4 +1,5 @@
 ## SpaceWise
+![Banner](./src/Design%20Team%20Glossary%20Docs%20Banner%20in%20Black%20and%20White%20Editorial%20Style.png)
 <!-- Add the logo here !-->
 *An ideal educational tool for space enthusiasts and students🚀*
 
