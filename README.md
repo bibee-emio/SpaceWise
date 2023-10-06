@@ -1,5 +1,5 @@
 ## SpaceWise
-
+![SPACEWISE](./src/banner.png)
 *An ideal educational tool for space enthusiasts and students🚀*
 
 ### Introduction
