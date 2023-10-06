@@ -1,7 +1,7 @@
 ## SpaceWise
 ![SPACEWISE](./src/banner.png)
-*An ideal educational tool for space enthusiasts and students🚀*
-
+<!--*An ideal educational tool for space enthusiasts and students🚀*
+!-->
 ### Introduction
 
 This tool has ability to scrape data that are related to Astronomy from various websites* and output them as a document. SpaceWise will save your time of searching latest information. 
