@@ -16,31 +16,37 @@ An ideal educational tool for space enthusiasts and students🚀
 
 class InteractiveCLI:
 
-    def __init__(self,
-                 categories: list = [
-            'spacex',
-            'artemis',
-            'commercial',
-            'ISS'
-        ] 
-                 ):
+    def __init__(self,categories: dict):
         self.categories = categories
 
     def print_welcome(self):
         print(welcome)
+    
 
-
-    def category_table(self) -> int:
+    def category_table(self,__nested_list = []) -> int:
+        '''Prints an ordered list of self.categories'''
         print('Choose a category;')
-        for i,c in enumerate(self.categories,1):
+        # Checking if function is reoccuring...
+        if len(__nested_list) == 0:
+            keys = list(self.categories.keys())
+            categories = self.categories
+        else:
+            keys = __nested_list
+            categories = __nested_list
+        # printing
+        for i,c in enumerate(keys,1):
             print(f'\t{i}) {c.title()}')
-        
+        # Getting the user input and processing it.
         while True:
-            category = input('SpaceWise: ')
+            choise = input('SpaceWise: ')
             try:
-                category = int(category)
-                if category in range(len(self.categories)+1):
-                    return category
+                choise = int(choise)
+                if choise in range(len(categories)+1):
+                    if type(categories) is list: # This gets True when function executing 
+                        return choise            # a sub-category list
+                    elif type(categories[keys[choise-1]]) is list:
+                        self.category_table(categories[keys[choise-1]])
+                    return choise
                 print('[!] Please enter a valid category number.')
             except ValueError:
                 print('[!] Please enter an Integer.')
@@ -49,8 +55,9 @@ class InteractiveCLI:
     def run(self):
         self.print_welcome()
         category = self.category_table()
-        print('Connnecting...')        
-        choise = self.categories[category-1].lower()
+        print('Connnecting...')
+        print(self.categories)
+        choise = list(self.categories.keys())[category-1].lower()
         nasa_space_flight = NasaSpaceFlight(choise)
         header = nasa_space_flight.get_headline()
 
