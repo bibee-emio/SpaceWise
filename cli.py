@@ -16,31 +16,39 @@ An ideal educational tool for space enthusiasts and students🚀
 
 class InteractiveCLI:
 
-    def __init__(self,
-                 categories: list = [
-            'spacex',
-            'artemis',
-            'commercial',
-            'ISS'
-        ] 
-                 ):
+    def __init__(self,categories: dict):
         self.categories = categories
 
     def print_welcome(self):
         print(welcome)
+    
 
-
-    def category_table(self) -> int:
+    def category_table(self,__nested_list = [],url_prefix='') -> str:
+        '''Prints an ordered list of self.categories'''
+        url_suffix = url_prefix
         print('Choose a category;')
-        for i,c in enumerate(self.categories,1):
+        # Checking if function is reoccuring...
+        if len(__nested_list) == 0:
+            keys = list(self.categories.keys())
+            categories = self.categories
+        else:
+            keys = __nested_list
+            categories = __nested_list
+        # printing
+        for i,c in enumerate(keys,1):
             print(f'\t{i}) {c.title()}')
-        
+        # Getting the user input and processing it.
         while True:
-            category = input('SpaceWise: ')
+            choise = input('SpaceWise: ')
             try:
-                category = int(category)
-                if category in range(len(self.categories)+1):
-                    return category
+                choise = int(choise)
+                if choise in range(len(categories)+1):
+                    if type(categories) is list:                         # This gets True when function executing 
+                        return f'{url_suffix}/{categories[choise-1]}'    # a sub-category list
+                    elif type(categories[keys[choise-1]]) is list:
+                        return self.category_table(categories[keys[choise-1]],keys[choise-1])
+                    url_suffix += keys[choise-1]
+                    return url_suffix
                 print('[!] Please enter a valid category number.')
             except ValueError:
                 print('[!] Please enter an Integer.')
@@ -48,10 +56,12 @@ class InteractiveCLI:
     # TODO: Use threding for animate time taking process like [connectine..., downloading....]
     def run(self):
         self.print_welcome()
-        category = self.category_table()
-        print('Connnecting...')        
-        choise = self.categories[category-1].lower()
-        nasa_space_flight = NasaSpaceFlight(choise)
+        choice = self.category_table().lower()
+        #print(choice)
+        print('Connnecting...')
+        #print(self.categories)
+        #choise = list(self.categories.keys())[category-1].lower()
+        nasa_space_flight = NasaSpaceFlight(choice)
         header = nasa_space_flight.get_headline()
 
         print(f'[Latest Article]: {header}')
@@ -64,10 +74,10 @@ class InteractiveCLI:
         print('Downloading Images...')
         urls = nasa_space_flight.get_image_urls()
         # Creating a meaningfull name for image file names
-        prefix = f'{choise.title()}-[{paragraph[:10]}]'
+        prefix = f'{choice.title()}-[{paragraph[:10]}]'
         image_count = SpecialFuntions().download_images(urls,prefix)
 
-        document_name = f'{choise.title()}-[{prefix}].docx'
+        document_name = f'{choice.title()}-[{prefix}].docx'
         # Writing,Adding,Saving the document
         doc = NasaSpaceFlightDocumentWriter(document_name)
         doc.write_document(
