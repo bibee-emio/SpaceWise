@@ -23,8 +23,9 @@ class InteractiveCLI:
         print(welcome)
     
 
-    def category_table(self,__nested_list = []) -> int:
+    def category_table(self,__nested_list = [],url_prefix='') -> str:
         '''Prints an ordered list of self.categories'''
+        url_suffix = url_prefix
         print('Choose a category;')
         # Checking if function is reoccuring...
         if len(__nested_list) == 0:
@@ -42,11 +43,12 @@ class InteractiveCLI:
             try:
                 choise = int(choise)
                 if choise in range(len(categories)+1):
-                    if type(categories) is list: # This gets True when function executing 
-                        return choise            # a sub-category list
+                    if type(categories) is list:                         # This gets True when function executing 
+                        return f'{url_suffix}/{categories[choise-1]}'    # a sub-category list
                     elif type(categories[keys[choise-1]]) is list:
-                        self.category_table(categories[keys[choise-1]])
-                    return choise
+                        return self.category_table(categories[keys[choise-1]],keys[choise-1])
+                    url_suffix += keys[choise-1]
+                    return url_suffix
                 print('[!] Please enter a valid category number.')
             except ValueError:
                 print('[!] Please enter an Integer.')
@@ -54,11 +56,12 @@ class InteractiveCLI:
     # TODO: Use threding for animate time taking process like [connectine..., downloading....]
     def run(self):
         self.print_welcome()
-        category = self.category_table()
+        choice = self.category_table().lower()
+        #print(choice)
         print('Connnecting...')
-        print(self.categories)
-        choise = list(self.categories.keys())[category-1].lower()
-        nasa_space_flight = NasaSpaceFlight(choise)
+        #print(self.categories)
+        #choise = list(self.categories.keys())[category-1].lower()
+        nasa_space_flight = NasaSpaceFlight(choice)
         header = nasa_space_flight.get_headline()
 
         print(f'[Latest Article]: {header}')
@@ -71,10 +74,10 @@ class InteractiveCLI:
         print('Downloading Images...')
         urls = nasa_space_flight.get_image_urls()
         # Creating a meaningfull name for image file names
-        prefix = f'{choise.title()}-[{paragraph[:10]}]'
+        prefix = f'{choice.title()}-[{paragraph[:10]}]'
         image_count = SpecialFuntions().download_images(urls,prefix)
 
-        document_name = f'{choise.title()}-[{prefix}].docx'
+        document_name = f'{choice.title()}-[{prefix}].docx'
         # Writing,Adding,Saving the document
         doc = NasaSpaceFlightDocumentWriter(document_name)
         doc.write_document(
