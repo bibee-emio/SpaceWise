@@ -8,7 +8,7 @@ NASA_SPACE_FLIGHT_CATEGORY_DICTIONARY = {
             'International':[
                 'All',
                 'Chinese',
-                'European',
+                'Europe',
                 'Indian',
                 'Russian'
             ],
