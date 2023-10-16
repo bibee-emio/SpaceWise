@@ -1,3 +1,4 @@
+import os
 import requests
 from typing import List
 
@@ -18,6 +19,14 @@ class SpecialFuntions:
         c = 1
         for link in url_list:
             data = requests.get(link)
+
+            # Cheking if category folders are exist
+            file_name = f'{self.path}{image_prefix}-pic-{c}.jpg'
+            file_path = os.path.dirname(file_name)
+            if not os.path.exists(file_path):
+                os.mkdir(file_path)
+
+            open(file_name,'wb').close()
             with open(f'{self.path}{image_prefix}-pic-{c}.jpg','wb') as imagefile:
                 for chunk in data.iter_content(512):
                     imagefile.write(chunk)

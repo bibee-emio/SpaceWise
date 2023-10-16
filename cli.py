@@ -77,7 +77,7 @@ class InteractiveCLI:
         prefix = f'{choice.title()}-[{paragraph[:10]}]'
         image_count = SpecialFuntions().download_images(urls,prefix)
 
-        document_name = f'{choice.title()}-[{prefix}].docx'
+        document_name = f'{choice.title()}-[{prefix}].docx'.replace('/','-')
         # Writing,Adding,Saving the document
         doc = NasaSpaceFlightDocumentWriter(document_name)
         doc.write_document(
