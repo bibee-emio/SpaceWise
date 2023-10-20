@@ -23,17 +23,17 @@ class InteractiveCLI:
         print(welcome)
     
 
-    def category_table(self,__nested_list = [],url_prefix='') -> str:
+    def category_table(self,__nested_dict:dict = {},url_prefix='') -> str:
         '''Prints an ordered list of self.categories'''
         url_suffix = url_prefix
         print('Choose a category;')
         # Checking if function is reoccuring...
-        if len(__nested_list) == 0:
+        if len(__nested_dict.keys()) == 0:
             keys = list(self.categories.keys())
             categories = self.categories
         else:
-            keys = __nested_list
-            categories = __nested_list
+            keys = list(__nested_dict.keys())
+            categories = __nested_dict
         # printing
         for i,c in enumerate(keys,1):
             print(f'\t{i}) {c.title()}')
@@ -42,10 +42,15 @@ class InteractiveCLI:
             choise = input('SpaceWise: ')
             try:
                 choise = int(choise)
+                #print(keys)
                 if choise in range(len(categories)+1):
-                    if type(categories) is list:                         # This gets True when function executing 
-                        return f'{url_suffix}/{categories[choise-1]}'    # a sub-category list
-                    elif type(categories[keys[choise-1]]) is list:
+                    #print(type(categories),categories)
+                    if url_prefix:#type(categories) is list:                         # This gets True when function executing 
+                        #print(f'{url_suffix}/{categories[keys[choise-1]]}')
+                        #return
+                        return f'{url_suffix}/{categories[keys[choise-1]]}'    # a sub-category list   for 2nd time 
+                    elif type(categories[keys[choise-1]]) is dict:          # for 1st time
+                        #print('#######1')
                         return self.category_table(categories[keys[choise-1]],keys[choise-1])
                     url_suffix += keys[choise-1]
                     return url_suffix
