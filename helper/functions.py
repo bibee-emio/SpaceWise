@@ -1,3 +1,5 @@
+import sys
+import time
 import os
 import requests
 from typing import List
@@ -35,4 +37,15 @@ class SpecialFuntions:
             c += 1
         return c
     
+class CliFunctions:
+    '''This class mostly functions that are relavent to command line user interface'''
 
+    # Prints given words to the terminal in a type writed way
+    @classmethod
+    #@staticmethod
+    def type_write(cls,word: str):
+        for character in word:
+            print(character,end='')
+            sys.stdout.flush()
+            time.sleep(0.05)
+        print('')

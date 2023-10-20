@@ -1,7 +1,7 @@
 import os
 
 from crawler import NasaSpaceFlight
-from helper import SpecialFuntions, NasaSpaceFlightDocumentWriter
+from helper import SpecialFuntions, NasaSpaceFlightDocumentWriter, CliFunctions
 
 welcome = '''
 ███████╗██████╗  █████╗  ██████╗███████╗██╗    ██╗██╗███████╗███████╗
@@ -26,7 +26,9 @@ class InteractiveCLI:
     def category_table(self,__nested_dict:dict = {},url_prefix='') -> str:
         '''Prints an ordered list of self.categories'''
         url_suffix = url_prefix
+
         print('Choose a category;')
+        
         # Checking if function is reoccuring...
         if len(__nested_dict.keys()) == 0:
             keys = list(self.categories.keys())
@@ -63,7 +65,9 @@ class InteractiveCLI:
         self.print_welcome()
         choice = self.category_table().lower()
         #print(choice)
-        print('Connnecting...')
+
+        CliFunctions.type_write('Connnecting...')
+        
         #print(self.categories)
         #choise = list(self.categories.keys())[category-1].lower()
         nasa_space_flight = NasaSpaceFlight(choice)
@@ -74,9 +78,12 @@ class InteractiveCLI:
         if (input('Do you need to download it [y/n]?: ') + ' ')[0].lower() == 'n':
             exit(0)
         
-        print('Getting Data...')
+        CliFunctions.type_write('Getting Data...')
+        
         paragraph = nasa_space_flight.get_paragraph()
-        print('Downloading Images...')
+
+        CliFunctions.type_write('Downloading Images...')
+
         urls = nasa_space_flight.get_image_urls()
         # Creating a meaningfull name for image file names
         prefix = f'{choice.title()}-[{paragraph[:10]}]'
