@@ -35,11 +35,18 @@ class DocumentWriter:
                   file: Union[str, BinaryIO],
                   width: Union[int, float] = 6,
                   height: Union[int, float] = 4.1):
-        self.__doc.add_picture(file,
-                               width=Inches(width),
-                               height=Inches(height)
-            )
-
+        try:
+            self.__doc.add_picture(file,
+                                   width=Inches(width),
+                                   height=Inches(height)
+                )
+        # Handling UnrecognizedImageError
+        except UnrecognizedImageError:
+            Image.open(file).save(file)
+            self.__doc.add_picture(file,
+                                   width=Inches(width),
+                                   height=Inches(height)
+                )
     # Save the Document as .docx file
     def save_document(self):
         self.__doc.save(self.document_name)
@@ -71,11 +78,7 @@ class NasaSpaceFlightDocumentWriter(DocumentWriter):
 
         for pic_num in range(2,image_count):
             img = f'src/{image_prefix}-pic-{pic_num}.jpg'
-            try:
-                self.add_image(img)
-            except UnrecognizedImageError:
-                Image.open(img).save(img)
-                self.add_image(img)
+            self.add_image(img)
         
         # Finally saving the document(.docx) at the given path
         self.save_document()
