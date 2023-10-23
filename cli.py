@@ -1,4 +1,5 @@
 import os
+from threading import Thread
 
 from crawler import NasaSpaceFlight
 from helper import SpecialFuntions, NasaSpaceFlightDocumentWriter, CliFunctions
@@ -66,29 +67,42 @@ class InteractiveCLI:
         choice = self.category_table().lower()
         #print(choice)
 
-        CliFunctions.type_write('Connnecting...')
-        
+        log_thread_1 = Thread(
+            target=CliFunctions.type_write,
+            args=['Connecting...']
+        )
+        log_thread_2 = Thread(
+            target=CliFunctions.type_write,
+            args=['Getting Data...']
+        )
+        log_thread_3 = Thread(
+            target=CliFunctions.type_write,
+            args=['Downloading images...']
+        )
+
+        #CliFunctions.type_write('Connnecting...')
+        log_thread_1.start()
         #print(self.categories)
         #choise = list(self.categories.keys())[category-1].lower()
         nasa_space_flight = NasaSpaceFlight(choice)
         header = nasa_space_flight.get_headline()
-
+        log_thread_1.join()
         print(f'[Latest Article]: {header}')
 
         if (input('Do you need to download it [y/n]?: ') + ' ')[0].lower() == 'n':
             exit(0)
         
-        CliFunctions.type_write('Getting Data...')
-        
+        #CliFunctions.type_write('Getting Data...')
+        log_thread_2.start()
         paragraph = nasa_space_flight.get_paragraph()
-
-        CliFunctions.type_write('Downloading Images...')
-
+        log_thread_2.join()
+        #CliFunctions.type_write('Downloading Images...')
+        log_thread_3.start()
         urls = nasa_space_flight.get_image_urls()
         # Creating a meaningfull name for image file names
         prefix = f'{choice.title()}-[{paragraph[:10]}]'
         image_count = SpecialFuntions().download_images(urls,prefix)
-
+        log_thread_3.join()
         document_name = f'{choice.title()}-[{prefix}].docx'.replace('/','-')
         # Writing,Adding,Saving the document
         doc = NasaSpaceFlightDocumentWriter(document_name)
