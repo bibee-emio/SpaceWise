@@ -45,15 +45,10 @@ class InteractiveCLI:
             choise = input('SpaceWise: ')
             try:
                 choise = int(choise)
-                #print(keys)
                 if choise in range(len(categories)+1):
-                    #print(type(categories),categories)
-                    if url_prefix:#type(categories) is list:                         # This gets True when function executing 
-                        #print(f'{url_suffix}/{categories[keys[choise-1]]}')
-                        #return
-                        return f'{url_suffix}/{categories[keys[choise-1]]}'    # a sub-category list   for 2nd time 
-                    elif type(categories[keys[choise-1]]) is dict:          # for 1st time
-                        #print('#######1')
+                    if url_prefix:                                              # This gets True when function executing 
+                        return f'{url_suffix}/{categories[keys[choise-1]]}'     # a sub-category list   for 2nd time 
+                    elif type(categories[keys[choise-1]]) is dict:              # for 1st time
                         return self.category_table(categories[keys[choise-1]],keys[choise-1])
                     url_suffix += keys[choise-1]
                     return url_suffix
@@ -61,7 +56,6 @@ class InteractiveCLI:
             except ValueError:
                 print('[!] Please enter an Integer.')
 
-    # TODO: Use threding for animate time taking process like [connectine..., downloading....]
     def run(self):
         self.print_welcome()
         choice = self.category_table().lower()
@@ -80,10 +74,8 @@ class InteractiveCLI:
             args=['Downloading images...']
         )
 
-        #CliFunctions.type_write('Connnecting...')
+
         log_thread_1.start()
-        #print(self.categories)
-        #choise = list(self.categories.keys())[category-1].lower()
         nasa_space_flight = NasaSpaceFlight(choice)
         header = nasa_space_flight.get_headline()
         log_thread_1.join()
@@ -92,18 +84,19 @@ class InteractiveCLI:
         if (input('Do you need to download it [y/n]?: ') + ' ')[0].lower() == 'n':
             exit(0)
         
-        #CliFunctions.type_write('Getting Data...')
         log_thread_2.start()
         paragraph = nasa_space_flight.get_paragraph()
         log_thread_2.join()
-        #CliFunctions.type_write('Downloading Images...')
         log_thread_3.start()
         urls = nasa_space_flight.get_image_urls()
+        
         # Creating a meaningfull name for image file names
         prefix = f'{choice.title()}-[{paragraph[:10]}]'
+        
         image_count = SpecialFuntions().download_images(urls,prefix)
         log_thread_3.join()
         document_name = f'{choice.title()}-[{prefix}].docx'.replace('/','-')
+        
         # Writing,Adding,Saving the document
         doc = NasaSpaceFlightDocumentWriter(document_name)
         doc.write_document(
